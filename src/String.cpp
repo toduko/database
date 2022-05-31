@@ -132,6 +132,11 @@ bool String::isEmpty() const
   return this->length == 0;
 }
 
+bool String::isEscapableCharacter(char c)
+{
+  return c == '\\' || c == '"';
+}
+
 bool String::includes(const String &substring) const
 {
   return strstr(this->data, substring.data) != nullptr;

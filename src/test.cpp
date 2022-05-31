@@ -2,6 +2,7 @@
 
 #include "String.h"
 #include "Vector.h"
+#include "Validator.h"
 
 void test_string(void)
 {
@@ -53,7 +54,30 @@ void test_vector(void)
   }
 }
 
+void test_validator(void)
+{
+  IntValidator intV;
+  DoubleValidator doubleV;
+  StringValidator stringV;
+
+  TEST_CHECK(intV.isValid("+123"));
+  TEST_CHECK(intV.isValid("-123"));
+  TEST_CHECK(intV.isValid("123"));
+  TEST_CHECK(!intV.isValid("1+23"));
+
+  TEST_CHECK(doubleV.isValid("+123.0"));
+  TEST_CHECK(doubleV.isValid("-123.5"));
+  TEST_CHECK(doubleV.isValid("123.6"));
+  TEST_CHECK(!doubleV.isValid("12."));
+
+  TEST_CHECK(stringV.isValid("\"test\""));
+  TEST_CHECK(stringV.isValid("\"test\\\\test\""));
+  TEST_CHECK(!stringV.isValid("test"));
+  TEST_CHECK(!stringV.isValid("\"te\\st\""));
+}
+
 TEST_LIST = {
     {"String", test_string},
     {"Vector", test_vector},
+    {"Validator", test_validator},
     {NULL, NULL}};

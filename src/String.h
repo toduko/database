@@ -51,6 +51,7 @@ public:
   String &operator+=(const String &other);
 
   static bool isDigit(char c);
+  static bool isEscapableCharacter(char c);
   static unsigned toDigit(char c);
   static char toChar(unsigned digit);
 };
