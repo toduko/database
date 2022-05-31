@@ -12,7 +12,14 @@ private:
   bool shouldContinue;
 
   void printCommands() const;
+
   void parse(const String &command);
+
+protected:
+  virtual void printSpecialCommands() const;
+  virtual void handleSpecialCommand(const String &command, const Vector<String> &args);
+  virtual bool isSpecialCommand(const String &command) const;
+  virtual void stop();
 
 public:
   CLI(const String &name);

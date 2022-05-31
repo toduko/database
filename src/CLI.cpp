@@ -2,19 +2,47 @@
 
 #include <iostream>
 
-CLI::CLI(const String &name) : name(name) {}
+CLI::CLI(const String &name) : name(name), shouldContinue(true) {}
 
 CLI::CLI(const String &name, const Vector<Command> &commands)
     : name(name), commands(commands), shouldContinue(true) {}
 
+bool CLI::isSpecialCommand(const String &command) const
+{
+  return command == String("help") || command == String("exit");
+}
+
+void CLI::printSpecialCommands() const
+{
+  std::cout << "help - prints this menu\n";
+  std::cout << "exit - exits the program\n";
+}
+
+void CLI::handleSpecialCommand(const String &command, const Vector<String> &args)
+{
+  if (command == String("help"))
+  {
+    std::cout << "Available commands:\n";
+    this->printSpecialCommands();
+    this->printCommands();
+  }
+  else if (command == String("exit"))
+  {
+    this->stop();
+  }
+}
+
 void CLI::printCommands() const
 {
-  std::cout << "Available commands:\n";
-  std::cout << "help - prints this menu\n";
   for (size_t i = 0; i < this->commands.getSize(); ++i)
   {
     std::cout << commands[i].getName() << " - " << commands[i].getDescription() << std::endl;
   }
+}
+
+void CLI::stop()
+{
+  this->shouldContinue = false;
 }
 
 void CLI::parse(const String &command)
@@ -24,9 +52,9 @@ void CLI::parse(const String &command)
   String cmd = args[0];
   args.remove(0);
 
-  if (cmd == String("help"))
+  if (this->isSpecialCommand(cmd))
   {
-    this->printCommands();
+    this->handleSpecialCommand(cmd, args);
   }
   else
   {
@@ -51,7 +79,7 @@ void CLI::parse(const String &command)
 
 void CLI::addCommand(const Command &command)
 {
-  if (command.getName() == String("help"))
+  if (this->isSpecialCommand(command.getName()))
   {
     throw "There already exists a command with the same name";
   }
@@ -68,7 +96,7 @@ void CLI::addCommand(const Command &command)
 
 void CLI::addCommand(Command &&command)
 {
-  if (command.getName() == String("help"))
+  if (this->isSpecialCommand(command.getName()))
   {
     throw "There already exists a command with the same name";
   }
