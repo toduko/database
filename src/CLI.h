@@ -9,13 +9,13 @@ class CLI
 private:
   Vector<Command> commands;
   String name;
-  bool shouldContinue;
 
   void printCommands() const;
 
   void parse(const String &command);
 
 protected:
+  bool shouldContinue;
   virtual void printSpecialCommands() const;
   virtual void handleSpecialCommand(const String &command, const Vector<String> &args);
   virtual bool isSpecialCommand(const String &command) const;

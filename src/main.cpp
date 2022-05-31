@@ -1,8 +1,10 @@
+#include "DatabaseCLI.h"
+
 #include <iostream>
 
 int main()
 {
-  std::cout << "Database" << std::endl;
+  DatabaseCLI::getInstance().run();
 
   return 0;
 }

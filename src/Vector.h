@@ -193,6 +193,14 @@ public:
   {
     return this->find(value) != -1;
   }
+
+  void clear()
+  {
+    this->free();
+    this->size = 0;
+    this->capacity = Vector::DEFAULT_CAPACITY;
+    this->values = new Optional<T>[this->capacity];
+  }
 };
 
 template <typename T>
