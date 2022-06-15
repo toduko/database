@@ -36,6 +36,7 @@ public:
   size_t count(char symbol) const;
 
   bool isEmpty() const;
+  bool isOnlyLetters() const;
 
   bool includes(const String &substring) const;
 
@@ -50,6 +51,7 @@ public:
 
   String &operator+=(const String &other);
 
+  static bool isLetter(char c);
   static bool isDigit(char c);
   static bool isEscapableCharacter(char c);
   static unsigned toDigit(char c);

@@ -100,6 +100,14 @@ public:
   {
     return this->getData();
   }
+
+  void clear()
+  {
+    if (!this->isNull())
+    {
+      this->free();
+    }
+  }
 };
 
 #endif

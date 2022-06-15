@@ -1,6 +1,8 @@
 #ifndef DATABASE_CLI_H_
 #define DATABASE_CLI_H_
 
+#include "Database.h"
+#include "Optional.h"
 #include "CLI.h"
 
 #include <fstream>
@@ -8,9 +10,7 @@
 class DatabaseCLI final : public CLI
 {
 private:
-  static Vector<char> bytes;
-  static String filename;
-  static bool isFileOpen;
+  static Optional<Database> database;
 
   static void writeTo(std::ofstream &file);
   static void read(const Vector<String> &args);
@@ -22,6 +22,9 @@ private:
   DatabaseCLI();
 
 public:
+  DatabaseCLI(const DatabaseCLI &other) = delete;
+  DatabaseCLI &operator=(const DatabaseCLI &other) = delete;
+  
   static DatabaseCLI &getInstance();
 };
 

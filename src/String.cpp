@@ -132,6 +132,19 @@ bool String::isEmpty() const
   return this->length == 0;
 }
 
+bool String::isOnlyLetters() const
+{
+  for (size_t i = 0; i < this->length; ++i)
+  {
+    if (!String::isLetter(this->data[i]))
+    {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 bool String::isEscapableCharacter(char c)
 {
   return c == '\\' || c == '"';
@@ -261,6 +274,11 @@ size_t String::count(char symbol) const
   return count;
 }
 
+bool String::isLetter(char c)
+{
+  return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+}
+
 bool String::isDigit(char c)
 {
   return c >= '0' && c <= '9';
@@ -274,6 +292,7 @@ unsigned String::toDigit(char c)
   }
   return c - '0';
 }
+
 char String::toChar(unsigned digit)
 {
   if (digit >= 10)
