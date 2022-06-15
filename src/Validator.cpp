@@ -68,7 +68,7 @@ bool StringValidator::isValid(const String &data) const
   }
 
   String trimmed = std::move(data.removeFirst().removeLast());
-  
+
   for (size_t i = 0; i < trimmed.getLength(); ++i)
   {
     if (trimmed[i] == '\\')
@@ -82,4 +82,26 @@ bool StringValidator::isValid(const String &data) const
   }
 
   return true;
+}
+
+bool ValidationManager::isValid(const String &data, DataType type)
+{
+  Validator *validator;
+  switch (type)
+  {
+  case DataType::INT:
+    validator = new IntValidator();
+    break;
+  case DataType::DOUBLE:
+    validator = new DoubleValidator();
+    break;
+  case DataType::STRING:
+    validator = new StringValidator();
+    break;
+  }
+
+  bool validity = validator->isValid(data);
+  delete validator;
+
+  return validity;
 }

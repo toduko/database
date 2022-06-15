@@ -3,11 +3,12 @@
 
 #include "Vector.h"
 #include "String.h"
+#include "Table.h"
 
 class Database
 {
 private:
-  Vector<String> tables;
+  Vector<Table> tables;
   String name;
 
 public:

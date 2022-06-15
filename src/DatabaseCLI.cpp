@@ -9,10 +9,11 @@ void DatabaseCLI::writeTo(std::ofstream &file)
 
 DatabaseCLI::DatabaseCLI() : CLI("database")
 {
-  this->addCommand(std::move(Command("open", "opens specified file. Usage: open <file>", &DatabaseCLI::read)));
+  this->addCommand(std::move(Command("open", "opens specified database file. Usage: open <file>", &DatabaseCLI::read)));
   this->addCommand(std::move(Command("close", "closes currently opened file", &DatabaseCLI::close)));
   this->addCommand(std::move(Command("save", "saves the currently open file", &DatabaseCLI::save)));
   this->addCommand(std::move(Command("saveas", "saves the currently open file to specified file. Usage: saveas <file>", &DatabaseCLI::saveAs)));
+  this->addCommand(std::move(Command("showtables", "prints all of the tables in the currently opened database", &DatabaseCLI::showTables)));
 }
 
 void DatabaseCLI::read(const Vector<String> &args)
@@ -20,6 +21,11 @@ void DatabaseCLI::read(const Vector<String> &args)
   if (args.getSize() == 0)
   {
     throw "Must specify filename";
+  }
+
+  if (!DatabaseCLI::database.isNull())
+  {
+    throw "Another file is already open";
   }
 
   DatabaseCLI::database = Database(args[0]);
@@ -34,6 +40,7 @@ void DatabaseCLI::close(const Vector<String> &args)
   }
 
   std::cout << "Successfully closed " << DatabaseCLI::database.getData().getName() << std::endl;
+  DatabaseCLI::database.clear();
 }
 
 void DatabaseCLI::stop()
@@ -60,7 +67,6 @@ void DatabaseCLI::save(const Vector<String> &args)
 
   DatabaseCLI::writeTo(file);
   std::cout << "Successfully written to " << DatabaseCLI::database.getData().getName() << std::endl;
-  DatabaseCLI::database.clear();
 }
 
 void DatabaseCLI::saveAs(const Vector<String> &args)
@@ -83,7 +89,16 @@ void DatabaseCLI::saveAs(const Vector<String> &args)
 
   DatabaseCLI::writeTo(file);
   std::cout << "Successfully written to " << args[0] << std::endl;
-  DatabaseCLI::database.clear();
+}
+
+void DatabaseCLI::showTables(const Vector<String> &args)
+{
+  if (DatabaseCLI::database.isNull())
+  {
+    throw "No database is open";
+  }
+
+  DatabaseCLI::database.getData().printTableNames();
 }
 
 DatabaseCLI &DatabaseCLI::getInstance()

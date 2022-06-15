@@ -1,6 +1,14 @@
 #ifndef VALIDATOR_H_
 #define VALIDATOR_H_
+
 #include "String.h"
+
+enum DataType
+{
+  INT = 'I',
+  DOUBLE = 'D',
+  STRING = 'S'
+};
 
 class Validator
 {
@@ -25,6 +33,12 @@ class StringValidator final : public Validator
 {
 public:
   bool isValid(const String &data) const override;
+};
+
+class ValidationManager
+{
+public:
+  static bool isValid(const String &data, DataType type);
 };
 
 #endif
