@@ -1,6 +1,7 @@
 #include "DatabaseCLI.h"
 
 Optional<Database> DatabaseCLI::database;
+bool DatabaseCLI::hasChanges = false;
 
 void DatabaseCLI::writeTo(std::ofstream &file)
 {
@@ -45,7 +46,7 @@ void DatabaseCLI::close(const Vector<String> &args)
 
 void DatabaseCLI::stop()
 {
-  if (!DatabaseCLI::database.isNull())
+  if (DatabaseCLI::hasChanges)
   {
     throw "You have an open file with unsaved changes, please select close or save first";
   }

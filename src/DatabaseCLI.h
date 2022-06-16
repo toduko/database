@@ -11,13 +11,14 @@ class DatabaseCLI final : public CLI
 {
 private:
   static Optional<Database> database;
+  static bool hasChanges;
 
   static void writeTo(std::ofstream &file);
   static void read(const Vector<String> &args);
   static void save(const Vector<String> &args);
   static void saveAs(const Vector<String> &args);
   static void close(const Vector<String> &args);
-    static void showTables(const Vector<String> &args);
+  static void showTables(const Vector<String> &args);
 
   void stop() override;
   DatabaseCLI();
@@ -25,7 +26,7 @@ private:
 public:
   DatabaseCLI(const DatabaseCLI &other) = delete;
   DatabaseCLI &operator=(const DatabaseCLI &other) = delete;
-  
+
   static DatabaseCLI &getInstance();
 };
 
