@@ -22,7 +22,7 @@ bool Table::addRow(const Vector<String> &row)
 
   for (size_t i = 0; i < row.getSize(); ++i)
   {
-    if (!ValidationManager::isValid(row[i], this->columnTypes[i]))
+    if (row[i] != String("NULL") && !ValidationManager::isValid(row[i], this->columnTypes[i]))
     {
       return false;
     }
