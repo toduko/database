@@ -11,9 +11,9 @@ void DatabaseCLI::writeTo(std::ofstream &file)
 DatabaseCLI::DatabaseCLI() : CLI("database")
 {
   this->addCommand(std::move(Command("open", "opens specified database file. Usage: open <file>", &DatabaseCLI::read)));
-  this->addCommand(std::move(Command("close", "closes currently opened file", &DatabaseCLI::close)));
-  this->addCommand(std::move(Command("save", "saves the currently open file", &DatabaseCLI::save)));
-  this->addCommand(std::move(Command("saveas", "saves the currently open file to specified file. Usage: saveas <file>", &DatabaseCLI::saveAs)));
+  this->addCommand(std::move(Command("close", "closes currently opened database", &DatabaseCLI::close)));
+  this->addCommand(std::move(Command("save", "saves the currently open database", &DatabaseCLI::save)));
+  this->addCommand(std::move(Command("saveas", "saves the currently open database to specified file. Usage: saveas <file>", &DatabaseCLI::saveAs)));
   this->addCommand(std::move(Command("import", "imports a table to the database from file. Usage: import <table name>", &DatabaseCLI::import)));
   this->addCommand(std::move(Command("showtables", "prints all of the tables in the currently opened database", &DatabaseCLI::showTables)));
 }
@@ -22,12 +22,12 @@ void DatabaseCLI::read(const Vector<String> &args)
 {
   if (args.getSize() == 0)
   {
-    throw "Must specify filename";
+    throw "Must specify database";
   }
 
   if (!DatabaseCLI::database.isNull())
   {
-    throw "Another file is already open";
+    throw "Another database is already open";
   }
 
   DatabaseCLI::database = Database(args[0]);
@@ -41,6 +41,7 @@ void DatabaseCLI::close(const Vector<String> &args)
     throw "No file is open";
   }
 
+  DatabaseCLI::hasChanges = false;
   std::cout << "Successfully closed " << DatabaseCLI::database.getData().getName() << std::endl;
   DatabaseCLI::database.clear();
 }
@@ -49,7 +50,7 @@ void DatabaseCLI::stop()
 {
   if (DatabaseCLI::hasChanges)
   {
-    throw "You have an open file with unsaved changes, please select close or save first";
+    throw "You have an open database with unsaved changes, please select close or save first";
   }
   this->shouldContinue = false;
 }
@@ -58,7 +59,7 @@ void DatabaseCLI::save(const Vector<String> &args)
 {
   if (DatabaseCLI::database.isNull())
   {
-    throw "No file is open";
+    throw "No database is open";
   }
 
   std::ofstream file(DatabaseCLI::database.getData().getName(), std::ios::binary);
@@ -76,7 +77,7 @@ void DatabaseCLI::saveAs(const Vector<String> &args)
 {
   if (DatabaseCLI::database.isNull())
   {
-    throw "No file is open";
+    throw "No database is open";
   }
 
   if (args.getSize() == 0)
@@ -108,6 +109,8 @@ void DatabaseCLI::import(const Vector<String> &args)
   }
 
   DatabaseCLI::database.getData().importTable(args[0]);
+  DatabaseCLI::hasChanges = true;
+  std::cout << "Successfully opened table \"" << args[0] << "\"\n";
 }
 
 void DatabaseCLI::showTables(const Vector<String> &args)
