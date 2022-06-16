@@ -19,33 +19,53 @@ Database::Database(const String &databaseFilePath) : name(databaseFilePath)
     String tableName;
     file >> tableName;
 
-    if (tableName.isOnlyLetters() && !tableName.isEmpty())
-    {
-      Optional<Table> table(std::move(Table::createTable(tableName)));
-
-      if (!table.isNull())
-      {
-        this->tables.push(table.getData());
-      }
-      else
-      {
-        std::cerr << "Error creating table \"" << tableName << "\"\n";
-      }
-    }
-    else
-    {
-      std::cerr << "Since \"" << tableName
-                << "\" is not a valid table name it will not be read (line "
-                << lineCount << " - " << databaseFilePath << ")\n";
-    }
-
-    ++lineCount;
+    this->importTable(tableName);
   }
+
+  ++lineCount;
+}
+
+int Database::findTable(const String &tableName) const
+{
+  for (size_t i = 0; i < this->tables.getSize(); ++i)
+  {
+    if (this->tables[i].getName() == tableName)
+    {
+      return i;
+    }
+  }
+
+  return -1;
 }
 
 const String &Database::getName() const
 {
   return this->name;
+}
+
+void Database::importTable(const String &tableName)
+{
+  if (this->findTable(tableName) >= 0)
+  {
+    std::cerr << "Table \"" << tableName << "\" already exists in database\n";
+  }
+  if (tableName.isOnlyLetters() && !tableName.isEmpty())
+  {
+    Optional<Table> table(std::move(Table::createTable(tableName)));
+
+    if (!table.isNull())
+    {
+      this->tables.push(table.getData());
+    }
+    else
+    {
+      std::cerr << "Error creating table \"" << tableName << "\"\n";
+    }
+  }
+  else
+  {
+    std::cerr << "\"" << tableName << "\" is not a valid table name and it will not be read\n";
+  }
 }
 
 void Database::writeTo(std::ofstream &file) const

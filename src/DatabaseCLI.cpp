@@ -14,6 +14,7 @@ DatabaseCLI::DatabaseCLI() : CLI("database")
   this->addCommand(std::move(Command("close", "closes currently opened file", &DatabaseCLI::close)));
   this->addCommand(std::move(Command("save", "saves the currently open file", &DatabaseCLI::save)));
   this->addCommand(std::move(Command("saveas", "saves the currently open file to specified file. Usage: saveas <file>", &DatabaseCLI::saveAs)));
+  this->addCommand(std::move(Command("import", "imports a table to the database from file. Usage: import <table name>", &DatabaseCLI::import)));
   this->addCommand(std::move(Command("showtables", "prints all of the tables in the currently opened database", &DatabaseCLI::showTables)));
 }
 
@@ -67,6 +68,7 @@ void DatabaseCLI::save(const Vector<String> &args)
   }
 
   DatabaseCLI::writeTo(file);
+  DatabaseCLI::hasChanges = false;
   std::cout << "Successfully written to " << DatabaseCLI::database.getData().getName() << std::endl;
 }
 
@@ -89,7 +91,23 @@ void DatabaseCLI::saveAs(const Vector<String> &args)
   }
 
   DatabaseCLI::writeTo(file);
+  DatabaseCLI::hasChanges = false;
   std::cout << "Successfully written to " << args[0] << std::endl;
+}
+
+void DatabaseCLI::import(const Vector<String> &args)
+{
+  if (DatabaseCLI::database.isNull())
+  {
+    throw "No database is open";
+  }
+
+  if (args.getSize() == 0)
+  {
+    throw "Must specify table name";
+  }
+
+  DatabaseCLI::database.getData().importTable(args[0]);
 }
 
 void DatabaseCLI::showTables(const Vector<String> &args)
