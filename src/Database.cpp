@@ -49,23 +49,29 @@ void Database::importTable(const String &tableName)
   {
     std::cerr << "Table \"" << tableName << "\" already exists in database\n";
   }
-  if (tableName.isOnlyLetters() && !tableName.isEmpty())
-  {
-    Optional<Table> table(std::move(Table::createTable(tableName)));
+  
+  Optional<Table> table(std::move(Table::createTable(tableName)));
 
-    if (!table.isNull())
-    {
-      this->tables.push(table.getData());
-    }
-    else
-    {
-      std::cerr << "Error creating table \"" << tableName << "\"\n";
-    }
+  if (!table.isNull())
+  {
+    this->tables.push(table.getData());
   }
   else
   {
-    std::cerr << "\"" << tableName << "\" is not a valid table name and it will not be read\n";
+    std::cerr << "Error creating table \"" << tableName << "\"\n";
   }
+}
+
+void Database::exportTable(const String &tableName, const String &file)
+{
+  int index = this->findTable(tableName);
+
+  if (index == -1)
+  {
+    throw "Could not find a table with this name";
+  }
+
+  this->tables[index].writeTo(file);
 }
 
 void Database::writeTo(std::ofstream &file) const

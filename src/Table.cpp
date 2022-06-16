@@ -36,9 +36,24 @@ bool Table::addRow(const Vector<String> &row)
   return true;
 }
 
+bool Table::isValidName(const String &tableName)
+{
+  return tableName.isOnlyLetters() && !tableName.isEmpty();
+}
+
 void Table::write() const
 {
-  std::ofstream file(this->name + Table::FILE_EXTENSION, std::ios::trunc);
+  this->writeTo(this->name);
+}
+
+void Table::writeTo(const String &filename) const
+{
+  if (!Table::isValidName(filename))
+  {
+    throw "Invalid table name";
+  }
+
+  std::ofstream file(filename + Table::FILE_EXTENSION, std::ios::trunc);
 
   if (!file.is_open())
   {
@@ -80,6 +95,11 @@ const String &Table::getName() const
 
 Optional<Table> Table::createTable(const String &filename)
 {
+  if (!Table::isValidName(filename))
+  {
+    throw "Invalid table name";
+  }
+  
   Optional<Table> result;
 
   std::ifstream file(filename + Table::FILE_EXTENSION, std::ios::app);

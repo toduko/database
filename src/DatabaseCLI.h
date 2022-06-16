@@ -18,6 +18,7 @@ private:
   static void save(const Vector<String> &args);
   static void saveAs(const Vector<String> &args);
   static void import(const Vector<String> &args);
+  static void exportTable(const Vector<String> &args);
   static void close(const Vector<String> &args);
   static void showTables(const Vector<String> &args);
 

@@ -15,6 +15,7 @@ DatabaseCLI::DatabaseCLI() : CLI("database")
   this->addCommand(std::move(Command("save", "saves the currently open database", &DatabaseCLI::save)));
   this->addCommand(std::move(Command("saveas", "saves the currently open database to specified file. Usage: saveas <file>", &DatabaseCLI::saveAs)));
   this->addCommand(std::move(Command("import", "imports a table to the database from file. Usage: import <table name>", &DatabaseCLI::import)));
+  this->addCommand(std::move(Command("export", "saves a table to a table file. Usage: export <table name> <file>", &DatabaseCLI::exportTable)));
   this->addCommand(std::move(Command("showtables", "prints all of the tables in the currently opened database", &DatabaseCLI::showTables)));
 }
 
@@ -111,6 +112,22 @@ void DatabaseCLI::import(const Vector<String> &args)
   DatabaseCLI::database.getData().importTable(args[0]);
   DatabaseCLI::hasChanges = true;
   std::cout << "Successfully opened table \"" << args[0] << "\"\n";
+}
+
+void DatabaseCLI::exportTable(const Vector<String> &args)
+{
+  if (DatabaseCLI::database.isNull())
+  {
+    throw "No database is open";
+  }
+
+  if (args.getSize() < 2)
+  {
+    throw "Must specify both table name and file name";
+  }
+
+  DatabaseCLI::database.getData().exportTable(args[0], args[1]);
+  std::cout << "Successfully saved table \"" << args[0] << "\" to \"" << args[0] << "\"\n";
 }
 
 void DatabaseCLI::showTables(const Vector<String> &args)

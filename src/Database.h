@@ -18,6 +18,7 @@ public:
 
   int findTable(const String &tableName) const;
   void importTable(const String &tableName);
+  void exportTable(const String &tableName, const String &file);
   void writeTo(std::ofstream &file) const;
   void printTableNames() const;
 };

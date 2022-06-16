@@ -20,9 +20,11 @@ public:
   bool addRow(const Vector<String> &row);
 
   void write() const;
+  void writeTo(const String &filename) const;
 
   const String &getName() const;
 
+  static bool isValidName(const String& tableName);
   static Optional<Table> createTable(const String &filename);
 };
 
