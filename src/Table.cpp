@@ -88,6 +88,16 @@ void Table::writeTo(const String &filename) const
   file.close();
 }
 
+void Table::setName(const String &name)
+{
+  if (!Table::isValidName(name))
+  {
+    throw "Invalid new name for table";
+  }
+
+  this->name = name;
+}
+
 const String &Table::getName() const
 {
   return this->name;
@@ -99,7 +109,7 @@ Optional<Table> Table::createTable(const String &filename)
   {
     throw "Invalid table name";
   }
-  
+
   Optional<Table> result;
 
   std::ifstream file(filename + Table::FILE_EXTENSION, std::ios::app);

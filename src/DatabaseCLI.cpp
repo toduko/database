@@ -14,6 +14,7 @@ DatabaseCLI::DatabaseCLI() : CLI("database")
   this->addCommand(std::move(Command("close", "closes currently opened database", &DatabaseCLI::close)));
   this->addCommand(std::move(Command("save", "saves the currently open database", &DatabaseCLI::save)));
   this->addCommand(std::move(Command("saveas", "saves the currently open database to specified file. Usage: saveas <file>", &DatabaseCLI::saveAs)));
+  this->addCommand(std::move(Command("rename", "renames a table. Usage: rename <old name> <new name>", &DatabaseCLI::rename)));
   this->addCommand(std::move(Command("import", "imports a table to the database from file. Usage: import <table name>", &DatabaseCLI::import)));
   this->addCommand(std::move(Command("export", "saves a table to a table file. Usage: export <table name> <file>", &DatabaseCLI::exportTable)));
   this->addCommand(std::move(Command("showtables", "prints all of the tables in the currently opened database", &DatabaseCLI::showTables)));
@@ -97,6 +98,23 @@ void DatabaseCLI::saveAs(const Vector<String> &args)
   std::cout << "Successfully written to " << args[0] << std::endl;
 }
 
+void DatabaseCLI::rename(const Vector<String> &args)
+{
+  if (DatabaseCLI::database.isNull())
+  {
+    throw "No database is open";
+  }
+
+  if (args.getSize() < 2)
+  {
+    throw "Must specify both old table name and new table name";
+  }
+
+  DatabaseCLI::database.getData().renameTable(args[0], args[1]);
+  DatabaseCLI::hasChanges = true;
+  std::cout << "Successfully renamed table \"" << args[0] << "\" to \"" << args[1] << "\"\n";
+}
+
 void DatabaseCLI::import(const Vector<String> &args)
 {
   if (DatabaseCLI::database.isNull())
@@ -127,7 +145,7 @@ void DatabaseCLI::exportTable(const Vector<String> &args)
   }
 
   DatabaseCLI::database.getData().exportTable(args[0], args[1]);
-  std::cout << "Successfully saved table \"" << args[0] << "\" to \"" << args[0] << "\"\n";
+  std::cout << "Successfully saved table \"" << args[0] << "\" to \"" << args[1] << "\"\n";
 }
 
 void DatabaseCLI::showTables(const Vector<String> &args)

@@ -22,9 +22,11 @@ public:
   void write() const;
   void writeTo(const String &filename) const;
 
+  void setName(const String &name);
+
   const String &getName() const;
 
-  static bool isValidName(const String& tableName);
+  static bool isValidName(const String &tableName);
   static Optional<Table> createTable(const String &filename);
 };
 

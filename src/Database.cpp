@@ -47,9 +47,9 @@ void Database::importTable(const String &tableName)
 {
   if (this->findTable(tableName) >= 0)
   {
-    std::cerr << "Table \"" << tableName << "\" already exists in database\n";
+    throw "Table already exists in database";
   }
-  
+
   Optional<Table> table(std::move(Table::createTable(tableName)));
 
   if (!table.isNull())
@@ -62,7 +62,7 @@ void Database::importTable(const String &tableName)
   }
 }
 
-void Database::exportTable(const String &tableName, const String &file)
+void Database::exportTable(const String &tableName, const String &file) const
 {
   int index = this->findTable(tableName);
 
@@ -72,6 +72,23 @@ void Database::exportTable(const String &tableName, const String &file)
   }
 
   this->tables[index].writeTo(file);
+}
+
+void Database::renameTable(const String &oldName, const String &newName)
+{
+  int index = this->findTable(oldName);
+
+  if (index == -1)
+  {
+    throw "Could not find table to rename";
+  }
+
+  if (this->findTable(newName) != -1)
+  {
+    throw "New name must be unique";
+  }
+
+  this->tables[index].setName(newName);
 }
 
 void Database::writeTo(std::ofstream &file) const
