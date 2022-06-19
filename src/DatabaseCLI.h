@@ -16,6 +16,7 @@ private:
   static void writeTo(std::ofstream &file);
   static void read(const Vector<String> &args);
   static void save(const Vector<String> &args);
+  static void print(const Vector<String> &args);
   static void saveAs(const Vector<String> &args);
   static void rename(const Vector<String> &args);
   static void import(const Vector<String> &args);

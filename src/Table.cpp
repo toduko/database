@@ -1,8 +1,10 @@
 #include "Table.h"
+#include "Pager.h"
 
 #include <fstream>
 
 const String Table::FILE_EXTENSION(".table");
+const size_t Table::LINES_IN_PAGE = 5;
 
 Table::Table(const String &name, const Vector<DataType> &columnTypes)
     : name(name), columnTypes(columnTypes)
@@ -34,6 +36,26 @@ bool Table::addRow(const Vector<String> &row)
   }
 
   return true;
+}
+
+void Table::print() const
+{
+  Vector<String> lines;
+
+  for (size_t i = 0; i < this->data[0].getSize(); ++i)
+  {
+    String line("");
+
+    for (size_t j = 0; j < this->data.getSize(); ++j)
+    {
+      line += this->data[j][i];
+      line += String(" ");
+    }
+
+    lines.push(line);
+  }
+
+  Pager(lines, Table::LINES_IN_PAGE);
 }
 
 bool Table::isValidName(const String &tableName)

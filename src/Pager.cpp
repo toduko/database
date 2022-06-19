@@ -88,7 +88,7 @@ void Pager::close()
 
 void Pager::printPage() const
 {
-  std::cout << "Page " << this->currentPage + 1 << ":\n";
+  std::cout << "Page " << this->currentPage + 1 << '/' << this->pages.getSize() << ":\n";
 
   for (size_t i = 0; i < this->pages[this->currentPage].getSize(); ++i)
   {

@@ -10,6 +10,7 @@ class Table
 {
 private:
   const static String FILE_EXTENSION;
+  const static size_t LINES_IN_PAGE;
   String name;
   Vector<DataType> columnTypes;
   Vector<Vector<String>> data;
@@ -18,6 +19,8 @@ private:
 
 public:
   bool addRow(const Vector<String> &row);
+
+  void print() const;
 
   void write() const;
   void writeTo(const String &filename) const;

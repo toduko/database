@@ -17,6 +17,7 @@ public:
   const String &getName() const;
 
   int findTable(const String &tableName) const;
+  void printTable(const String &tableName) const;
   void importTable(const String &tableName);
   void exportTable(const String &tableName, const String &file) const;
   void renameTable(const String &oldName, const String &newName);

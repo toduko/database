@@ -43,6 +43,18 @@ const String &Database::getName() const
   return this->name;
 }
 
+void Database::printTable(const String &tableName) const
+{
+  int index = this->findTable(tableName);
+
+  if (index < 0)
+  {
+    throw "Table not found";
+  }
+
+  this->tables[index].print();
+}
+
 void Database::importTable(const String &tableName)
 {
   if (this->findTable(tableName) >= 0)
