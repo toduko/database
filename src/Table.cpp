@@ -84,6 +84,26 @@ size_t Table::deleteRows(size_t column, const String &value)
   return numDeleted;
 }
 
+size_t Table::countRows(size_t column, const String &value) const
+{
+  if (column-- > this->columnTypes.getSize())
+  {
+    throw "Column number too large";
+  }
+
+  size_t rows = 0;
+
+  for (size_t i = 0; i < this->data[column].getSize(); ++i)
+  {
+    if (this->data[column][i] == value)
+    {
+      ++rows;
+    }
+  }
+
+  return rows;
+}
+
 void Table::select(size_t column, const String &value) const
 {
   if (column-- > this->columnTypes.getSize())

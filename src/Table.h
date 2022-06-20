@@ -23,6 +23,7 @@ public:
 
   size_t deleteRows(size_t column, const String &value);
 
+  size_t countRows(size_t column, const String &value) const;
   void select(size_t column, const String &value) const;
 
   void describe() const;

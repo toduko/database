@@ -127,6 +127,19 @@ void Database::renameTable(const String &oldName, const String &newName)
   this->tables[index].setName(newName);
 }
 
+void Database::countRows(size_t column, const String &value, const String &tableName) const
+{
+  int index = this->findTable(tableName);
+
+  if (index < 0)
+  {
+    throw "Table not found";
+  }
+
+  size_t rows = this->tables[index].countRows(column, value);
+  std::cout << "Total rows containing value: " << rows << "\n";
+}
+
 void Database::deleteRows(size_t column, const String &value, const String &tableName)
 {
   int index = this->findTable(tableName);

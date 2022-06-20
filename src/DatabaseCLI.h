@@ -18,6 +18,7 @@ private:
   static void save(const Vector<String> &args);
   static void print(const Vector<String> &args);
   static void deleteRows(const Vector<String> &args);
+  static void countRows(const Vector<String> &args);
   static void select(const Vector<String> &args);
   static void saveAs(const Vector<String> &args);
   static void describe(const Vector<String> &args);
