@@ -26,6 +26,8 @@ public:
   String &operator=(String &&other);
   ~String();
 
+  size_t toNumber() const;
+
   String toLowercase() const;
   String toUppercase() const;
 
@@ -37,6 +39,7 @@ public:
 
   bool isEmpty() const;
   bool isOnlyLetters() const;
+  bool isOnlyDigits() const;
 
   bool includes(const String &substring) const;
 
@@ -51,6 +54,7 @@ public:
 
   String &operator+=(const String &other);
 
+  static String join(const Vector<String> &strings, char link);
   static bool isLetter(char c);
   static bool isDigit(char c);
   static bool isEscapableCharacter(char c);

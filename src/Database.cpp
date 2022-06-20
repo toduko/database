@@ -43,6 +43,18 @@ const String &Database::getName() const
   return this->name;
 }
 
+void Database::select(size_t column, const String &value, const String &tableName) const
+{
+  int index = this->findTable(tableName);
+
+  if (index < 0)
+  {
+    throw "Table not found";
+  }
+
+  this->tables[index].select(column, value);
+}
+
 void Database::describeTable(const String &tableName) const
 {
   int index = this->findTable(tableName);

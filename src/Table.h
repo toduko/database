@@ -20,6 +20,8 @@ private:
 public:
   bool addRow(const Vector<String> &row);
 
+  void select(size_t column, const String &value) const;
+
   void describe() const;
   void print() const;
 

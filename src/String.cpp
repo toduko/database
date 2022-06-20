@@ -145,6 +145,19 @@ bool String::isOnlyLetters() const
   return true;
 }
 
+bool String::isOnlyDigits() const
+{
+  for (size_t i = 0; i < this->length; ++i)
+  {
+    if (!String::isDigit(this->data[i]))
+    {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 bool String::isEscapableCharacter(char c)
 {
   return c == '\\' || c == '"';
@@ -153,6 +166,23 @@ bool String::isEscapableCharacter(char c)
 bool String::includes(const String &substring) const
 {
   return strstr(this->data, substring.data) != nullptr;
+}
+
+size_t String::toNumber() const
+{
+  if (!this->isOnlyDigits())
+  {
+    throw "Cannot convert string to number since it contains non-digits";
+  }
+
+  size_t result = 0;
+
+  for (size_t i = 0; i < this->length; ++i)
+  {
+    (result *= 10) += String::toDigit(this->data[i]);
+  }
+
+  return result;
 }
 
 String String::toLowercase() const
@@ -272,6 +302,23 @@ size_t String::count(char symbol) const
   }
 
   return count;
+}
+
+String String::join(const Vector<String> &strings, char link)
+{
+  String result("");
+
+  for (size_t i = 0; i < strings.getSize(); ++i)
+  {
+    if (i != 0)
+    {
+      result += link;
+    }
+
+    result += strings[i];
+  }
+
+  return result;
 }
 
 bool String::isLetter(char c)

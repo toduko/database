@@ -38,6 +38,33 @@ bool Table::addRow(const Vector<String> &row)
   return true;
 }
 
+void Table::select(size_t column, const String &value) const
+{
+  if (column-- > this->columnTypes.getSize())
+  {
+    throw "Column number too large";
+  }
+
+  Vector<String> lines;
+  for (size_t i = 0; i < this->data[column].getSize(); ++i)
+  {
+    if (this->data[column][i] == value)
+    {
+      String line("");
+
+      for (size_t j = 0; j < this->columnTypes.getSize(); ++j)
+      {
+        line += this->data[j][i];
+        line += String(" ");
+      }
+
+      lines.push(line);
+    }
+  }
+
+  Pager(lines, Table::LINES_IN_PAGE);
+}
+
 void Table::describe() const
 {
   std::cout << "The column types are in the following order: ";

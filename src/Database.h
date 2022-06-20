@@ -17,6 +17,7 @@ public:
   const String &getName() const;
 
   int findTable(const String &tableName) const;
+  void select(size_t column, const String &value, const String &tableName) const;
   void describeTable(const String &tableName) const;
   void printTable(const String &tableName) const;
   void importTable(const String &tableName);
