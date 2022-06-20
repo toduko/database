@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <cstring>
+#include <cmath>
 
 String::String(const char *data)
 {
@@ -155,7 +156,7 @@ bool String::isOnlyDigits() const
     }
   }
 
-  return true;
+  return this->length;
 }
 
 bool String::isEscapableCharacter(char c)
@@ -168,11 +169,11 @@ bool String::includes(const String &substring) const
   return strstr(this->data, substring.data) != nullptr;
 }
 
-size_t String::toNumber() const
+size_t String::toInt() const
 {
   if (!this->isOnlyDigits())
   {
-    throw "Cannot convert string to number since it contains non-digits";
+    throw "Cannot convert string to number";
   }
 
   size_t result = 0;
@@ -183,6 +184,26 @@ size_t String::toNumber() const
   }
 
   return result;
+}
+
+double String::toDouble() const
+{
+  Vector<String> numbers = this->split('.');
+
+  if (numbers.getSize() > 2)
+  {
+    throw "Cannot convert string to number";
+  }
+
+  double number1 = numbers[0].toInt();
+  double number2 = 0;
+
+  if (numbers.getSize() == 2)
+  {
+    number2 = pow(0.1, numbers[1].getLength()) * numbers[1].toInt();
+  }
+
+  return number1 + number2;
 }
 
 String String::toLowercase() const

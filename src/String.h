@@ -26,7 +26,8 @@ public:
   String &operator=(String &&other);
   ~String();
 
-  size_t toNumber() const;
+  size_t toInt() const;
+  double toDouble() const;
 
   String toLowercase() const;
   String toUppercase() const;

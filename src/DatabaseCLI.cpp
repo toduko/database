@@ -135,7 +135,7 @@ void DatabaseCLI::deleteRows(const Vector<String> &args)
   cpy.remove(0);
   cpy.remove(0);
 
-  DatabaseCLI::database.getData().deleteRows(args[0].toNumber(), String::join(cpy, ' '), args[1]);
+  DatabaseCLI::database.getData().deleteRows(args[0].toInt(), String::join(cpy, ' '), args[1]);
   DatabaseCLI::hasChanges = true;
 }
 
@@ -155,7 +155,7 @@ void DatabaseCLI::countRows(const Vector<String> &args)
   cpy.remove(0);
   cpy.remove(0);
 
-  DatabaseCLI::database.getData().countRows(args[0].toNumber(), String::join(cpy, ' '), args[1]);
+  DatabaseCLI::database.getData().countRows(args[0].toInt(), String::join(cpy, ' '), args[1]);
 }
 
 void DatabaseCLI::select(const Vector<String> &args)
@@ -174,7 +174,7 @@ void DatabaseCLI::select(const Vector<String> &args)
   cpy.remove(0);
   cpy.remove(0);
 
-  DatabaseCLI::database.getData().select(args[0].toNumber(), String::join(cpy, ' '), args[1]);
+  DatabaseCLI::database.getData().select(args[0].toInt(), String::join(cpy, ' '), args[1]);
 }
 
 void DatabaseCLI::addColumn(const Vector<String> &args)
