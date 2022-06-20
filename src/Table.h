@@ -23,6 +23,8 @@ public:
 
   Table innerJoin(size_t column, const Table &other, size_t otherColumn) const;
 
+  double aggregate(size_t searchColumn, const String &value, size_t targetColumn, const String &operation) const;
+
   size_t update(size_t column, const String &search, const String &replace);
   size_t deleteRows(size_t column, const String &value);
 

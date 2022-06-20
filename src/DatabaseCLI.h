@@ -19,6 +19,7 @@ private:
   static void print(const Vector<String> &args);
   static void insert(const Vector<String> &args);
   static void update(const Vector<String> &args);
+  static void aggregate(const Vector<String> &args);
   static void innerJoin(const Vector<String> &args);
   static void deleteRows(const Vector<String> &args);
   static void countRows(const Vector<String> &args);

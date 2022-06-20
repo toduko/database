@@ -2,6 +2,7 @@
 #include "Pager.h"
 
 #include <fstream>
+#include <limits>
 
 const String Table::FILE_EXTENSION(".table");
 const size_t Table::LINES_IN_PAGE = 5;
@@ -110,6 +111,77 @@ Table Table::innerJoin(size_t column, const Table &other, size_t otherColumn) co
   }
 
   return result;
+}
+
+double Table::aggregate(size_t searchColumn, const String &value, size_t targetColumn, const String &operation) const
+{
+  if (searchColumn-- > this->columnTypes.getSize() || targetColumn-- > this->columnTypes.getSize())
+  {
+    throw "Column number too large";
+  }
+
+  String op = std::move(operation.toLowercase());
+
+  if (op != String("sum") && op != String("product") && op != String("minimum") && op != String("maximum"))
+  {
+    throw "Invalid operation";
+  }
+
+  if (this->columnTypes[targetColumn] != DataType::INT && this->columnTypes[targetColumn] != DataType::DOUBLE)
+  {
+    throw "Target column must be of a numeric type";
+  }
+
+  if (!this->data[searchColumn].getSize())
+  {
+    throw "Nothing to aggregate";
+  }
+
+  double aggregate = 0;
+
+  if (op == String("product"))
+  {
+    aggregate = 1;
+  }
+  else if (op == String("minimum"))
+  {
+    aggregate = std::numeric_limits<double>::max();
+  }
+  else if (op == String("maximum"))
+  {
+
+    aggregate = std::numeric_limits<double>::lowest();
+  }
+
+  for (size_t i = 0; i < this->data[searchColumn].getSize(); ++i)
+  {
+    if (this->data[searchColumn][i] == value)
+    {
+      if (this->data[targetColumn][i] != String("NULL"))
+      {
+        double val = this->data[targetColumn][i].toDouble();
+
+        if (op == String("sum"))
+        {
+          aggregate += val;
+        }
+        else if (op == String("product"))
+        {
+          aggregate *= val;
+        }
+        else if (op == String("minimum"))
+        {
+          aggregate = aggregate < val ? aggregate : val;
+        }
+        else if (op == String("maximum"))
+        {
+          aggregate = aggregate > val ? aggregate : val;
+        }
+      }
+    }
+  }
+
+  return aggregate;
 }
 
 size_t Table::update(size_t column, const String &search, const String &replace)

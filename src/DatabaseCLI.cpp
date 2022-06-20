@@ -16,6 +16,7 @@ DatabaseCLI::DatabaseCLI() : CLI("database")
   this->addCommand(std::move(Command("print", "prints all rows in table. Usage: print <table name>", &DatabaseCLI::print)));
   this->addCommand(std::move(Command("insert", "inserts a row in table. Usage: insert <table name>", &DatabaseCLI::insert)));
   this->addCommand(std::move(Command("update", "updates the rows that contain a specific value from a column in a table. Usage: update <table name> <column number>", &DatabaseCLI::update)));
+  this->addCommand(std::move(Command("aggregate", "calculates aggregate of an operation with the rows in target that contain a specific value from a search column in a table. Usage: aggregate <table name> <search column number> <target column number> <operation> <search value>", &DatabaseCLI::aggregate)));
   this->addCommand(std::move(Command("innerjoin", "does innerjoin operation on two tables. Usage: innerjoin <table 1 name> <column 1 number> <table 2 name> <column 2 number>", &DatabaseCLI::innerJoin)));
   this->addCommand(std::move(Command("select", "prints the rows that contain a specific value from a column in a table. Usage: select <column number> <table name> <search value>", &DatabaseCLI::select)));
   this->addCommand(std::move(Command("count", "counts the rows that contain a specific value from a column in a table. Usage: count <column number> <table name> <search value>", &DatabaseCLI::countRows)));
@@ -208,6 +209,27 @@ void DatabaseCLI::countRows(const Vector<String> &args)
   cpy.remove(0);
 
   DatabaseCLI::database.getData().countRows(args[0].toInt(), String::join(cpy, ' '), args[1]);
+}
+
+void DatabaseCLI::aggregate(const Vector<String> &args)
+{
+  if (DatabaseCLI::database.isNull())
+  {
+    throw "No database is open";
+  }
+
+  if (args.getSize() < 5)
+  {
+    throw "Must specify table name, search column, target column, operation, search value";
+  }
+
+  Vector<String> cpy(args);
+  cpy.remove(0);
+  cpy.remove(0);
+  cpy.remove(0);
+  cpy.remove(0);
+
+  DatabaseCLI::database.getData().aggregate(args[0], args[1].toInt(), String::join(cpy, ' '), args[2].toInt(), args[3]);
 }
 
 void DatabaseCLI::select(const Vector<String> &args)

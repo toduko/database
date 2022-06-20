@@ -20,6 +20,7 @@ public:
   void update(size_t column, const String &tableName);
   void insert(const String &tableName);
   void innerJoin(const String &table1Name, size_t column1, const String &table2Name, size_t column2);
+  void aggregate(const String &tableName, size_t searchColumn, const String &value, size_t targetColumn, const String &operation) const;
   void select(size_t column, const String &value, const String &tableName) const;
   void describeTable(const String &tableName) const;
   void printTable(const String &tableName) const;

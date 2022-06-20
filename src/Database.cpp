@@ -76,6 +76,19 @@ void Database::insert(const String &tableName)
   this->tables[index].insert();
 }
 
+void Database::aggregate(const String &tableName, size_t searchColumn, const String &value, size_t targetColumn, const String &operation) const
+{
+  int index = this->findTable(tableName);
+
+  if (index < 0)
+  {
+    throw "Table not found";
+  }
+
+  double aggregate = this->tables[index].aggregate(searchColumn, value, targetColumn, operation);
+  std::cout << "The aggregate is: " << aggregate << "\n";
+}
+
 void Database::innerJoin(const String &table1Name, size_t column1, const String &table2Name, size_t column2)
 {
   int index1 = this->findTable(table1Name);
