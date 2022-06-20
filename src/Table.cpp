@@ -59,6 +59,31 @@ bool Table::addRow(const Vector<String> &row)
   return true;
 }
 
+size_t Table::deleteRows(size_t column, const String &value)
+{
+  if (column-- > this->columnTypes.getSize())
+  {
+    throw "Column number too large";
+  }
+
+  size_t numDeleted = 0;
+
+  for (size_t i = 0; i < this->data[column].getSize(); ++i)
+  {
+    if (this->data[column][i] == value)
+    {
+      for (size_t j = 0; j < this->columnTypes.getSize(); ++j)
+      {
+        this->data[j].remove(i);
+      }
+      ++numDeleted;
+      --i;
+    }
+  }
+
+  return numDeleted;
+}
+
 void Table::select(size_t column, const String &value) const
 {
   if (column-- > this->columnTypes.getSize())

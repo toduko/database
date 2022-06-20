@@ -21,6 +21,8 @@ public:
   bool addColumn(DataType columnType);
   bool addRow(const Vector<String> &row);
 
+  size_t deleteRows(size_t column, const String &value);
+
   void select(size_t column, const String &value) const;
 
   void describe() const;

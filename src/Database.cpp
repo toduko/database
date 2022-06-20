@@ -127,6 +127,27 @@ void Database::renameTable(const String &oldName, const String &newName)
   this->tables[index].setName(newName);
 }
 
+void Database::deleteRows(size_t column, const String &value, const String &tableName)
+{
+  int index = this->findTable(tableName);
+
+  if (index < 0)
+  {
+    throw "Table not found";
+  }
+
+  size_t numDeleted = this->tables[index].deleteRows(column, value);
+
+  if (numDeleted)
+  {
+    std::cout << "Successfully deleted " << numDeleted << (numDeleted == 1 ? " row\n" : " rows\n");
+  }
+  else
+  {
+    throw "No rows deleted";
+  }
+}
+
 void Database::addColumn(const String &tableName, const String &columnType)
 {
   int index = this->findTable(tableName);
