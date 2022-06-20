@@ -38,6 +38,29 @@ bool Table::addRow(const Vector<String> &row)
   return true;
 }
 
+void Table::describe() const
+{
+  std::cout << "The column types are in the following order: ";
+
+  for (size_t i = 0; i < this->columnTypes.getSize(); ++i)
+  {
+    if (this->columnTypes[i] == DataType::INT)
+    {
+      std::cout << "Int ";
+    }
+    else if (this->columnTypes[i] == DataType::DOUBLE)
+    {
+      std::cout << "Double ";
+    }
+    else if (this->columnTypes[i] == DataType::STRING)
+    {
+      std::cout << "String ";
+    }
+  }
+
+  std::cout << std::endl;
+}
+
 void Table::print() const
 {
   Vector<String> lines;

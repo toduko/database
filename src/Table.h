@@ -20,6 +20,7 @@ private:
 public:
   bool addRow(const Vector<String> &row);
 
+  void describe() const;
   void print() const;
 
   void write() const;
