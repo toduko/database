@@ -38,6 +38,32 @@ int Database::findTable(const String &tableName) const
   return -1;
 }
 
+void Database::update(size_t column, const String &tableName)
+{
+  int index = this->findTable(tableName);
+
+  if (index < 0)
+  {
+    throw "Table not found";
+  }
+
+  String search, replace;
+  std::cout << "Enter value to replace: ";
+  std::cin >> search;
+  std::cout << "Enter new value: ";
+  std::cin >> replace;
+
+  size_t numUpdated = this->tables[index].update(column, search, replace);
+  if (numUpdated)
+  {
+    std::cout << "Successfully updated " << numUpdated << (numUpdated == 1 ? " row\n" : " rows\n");
+  }
+  else
+  {
+    throw "No rows affected";
+  }
+}
+
 void Database::insert(const String &tableName)
 {
   int index = this->findTable(tableName);

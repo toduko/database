@@ -59,6 +59,32 @@ bool Table::addRow(const Vector<String> &row)
   return true;
 }
 
+size_t Table::update(size_t column, const String &search, const String &replace)
+{
+  if (column-- > this->columnTypes.getSize())
+  {
+    throw "Column number too large";
+  }
+
+  if (!ValidationManager::isValid(replace, this->columnTypes[column]))
+  {
+    throw "Invalid new data";
+  }
+
+  size_t numUpdated = 0;
+
+  for (size_t i = 0; i < this->data[column].getSize(); ++i)
+  {
+    if (this->data[column][i] == search)
+    {
+      this->data[column][i] = replace;
+      ++numUpdated;
+    }
+  }
+
+  return numUpdated;
+}
+
 size_t Table::deleteRows(size_t column, const String &value)
 {
   if (column-- > this->columnTypes.getSize())
