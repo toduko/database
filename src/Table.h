@@ -18,6 +18,7 @@ private:
   Table(const String &name, const Vector<DataType> &columnTypes);
 
 public:
+  bool addColumn(DataType columnType);
   bool addRow(const Vector<String> &row);
 
   void select(size_t column, const String &value) const;

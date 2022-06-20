@@ -20,6 +20,7 @@ DatabaseCLI::DatabaseCLI() : CLI("database")
   this->addCommand(std::move(Command("rename", "renames a table. Usage: rename <old name> <new name>", &DatabaseCLI::rename)));
   this->addCommand(std::move(Command("import", "imports a table to the database from file. Usage: import <table name>", &DatabaseCLI::import)));
   this->addCommand(std::move(Command("export", "saves a table to a table file. Usage: export <table name> <file>", &DatabaseCLI::exportTable)));
+  this->addCommand(std::move(Command("addcolumn", "adds a column to the database. Usage: addcolumn <table name> <column type>", &DatabaseCLI::addColumn)));
   this->addCommand(std::move(Command("showtables", "prints all of the tables in the currently opened database", &DatabaseCLI::showTables)));
 }
 
@@ -133,6 +134,23 @@ void DatabaseCLI::select(const Vector<String> &args)
   cpy.remove(0);
 
   DatabaseCLI::database.getData().select(args[0].toNumber(), String::join(cpy, ' '), args[1]);
+}
+
+void DatabaseCLI::addColumn(const Vector<String> &args)
+{
+  if (DatabaseCLI::database.isNull())
+  {
+    throw "No database is open";
+  }
+
+  if (args.getSize() < 2)
+  {
+    throw "Must specify column number, table name and value";
+  }
+
+  DatabaseCLI::database.getData().addColumn(args[0], args[1]);
+  DatabaseCLI::hasChanges = true;
+  std::cout << "Successfully added column in table " << args[0] << "\n";
 }
 
 void DatabaseCLI::describe(const Vector<String> &args)

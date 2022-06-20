@@ -23,6 +23,7 @@ public:
   void importTable(const String &tableName);
   void exportTable(const String &tableName, const String &file) const;
   void renameTable(const String &oldName, const String &newName);
+  void addColumn(const String& tableName, const String& columnType);
   void writeTo(std::ofstream &file) const;
   void printTableNames() const;
 };

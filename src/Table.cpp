@@ -15,6 +15,27 @@ Table::Table(const String &name, const Vector<DataType> &columnTypes)
   }
 }
 
+bool Table::addColumn(DataType columnType)
+{
+  if (columnType != DataType::INT && columnType != DataType::DOUBLE && columnType != DataType::STRING)
+  {
+    return false;
+  }
+
+  this->columnTypes.push(columnType);
+  this->data.push(Vector<String>());
+
+  if (this->columnTypes.getSize() > 1)
+  {
+    for (size_t i = 0; i < this->data[0].getSize(); ++i)
+    {
+      this->data[this->columnTypes.getSize() - 1].push(String("NULL"));
+    }
+  }
+
+  return true;
+}
+
 bool Table::addRow(const Vector<String> &row)
 {
   if (row.getSize() != this->columnTypes.getSize())

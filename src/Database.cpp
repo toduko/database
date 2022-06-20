@@ -127,6 +127,27 @@ void Database::renameTable(const String &oldName, const String &newName)
   this->tables[index].setName(newName);
 }
 
+void Database::addColumn(const String &tableName, const String &columnType)
+{
+  int index = this->findTable(tableName);
+
+  if (index == -1)
+  {
+    throw "Could not find a table with this name";
+  }
+
+  String colType(std::move(columnType.toUppercase()));
+
+  if (colType == String("INT") || colType == String("DOUBLE") || colType == String("STRING"))
+  {
+    this->tables[index].addColumn((DataType)colType[0]);
+  }
+  else
+  {
+    throw "Invalid type for new column";
+  }
+}
+
 void Database::writeTo(std::ofstream &file) const
 {
   file.seekp(0);
