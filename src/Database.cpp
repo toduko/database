@@ -38,6 +38,18 @@ int Database::findTable(const String &tableName) const
   return -1;
 }
 
+void Database::insert(const String &tableName)
+{
+  int index = this->findTable(tableName);
+
+  if (index < 0)
+  {
+    throw "Table not found";
+  }
+
+  this->tables[index].insert();
+}
+
 const String &Database::getName() const
 {
   return this->name;

@@ -14,6 +14,7 @@ DatabaseCLI::DatabaseCLI() : CLI("database")
   this->addCommand(std::move(Command("close", "closes currently opened database", &DatabaseCLI::close)));
   this->addCommand(std::move(Command("save", "saves the currently open database", &DatabaseCLI::save)));
   this->addCommand(std::move(Command("print", "prints all rows in table. Usage: print <table name>", &DatabaseCLI::print)));
+  this->addCommand(std::move(Command("insert", "inserts a row in table. Usage: insert <table name>", &DatabaseCLI::insert)));
   this->addCommand(std::move(Command("select", "prints the rows that contain a specific value from a column in a table. Usage: select <column number> <table name> <search value>", &DatabaseCLI::select)));
   this->addCommand(std::move(Command("count", "counts the rows that contain a specific value from a column in a table. Usage: count <column number> <table name> <search value>", &DatabaseCLI::countRows)));
   this->addCommand(std::move(Command("delete", "deletes the rows that contain a specific value from a column in a table. Usage: delete <column number> <table name> <search value>", &DatabaseCLI::deleteRows)));
@@ -76,6 +77,23 @@ void DatabaseCLI::print(const Vector<String> &args)
   }
 
   DatabaseCLI::database.getData().printTable(args[0]);
+}
+
+void DatabaseCLI::insert(const Vector<String> &args)
+{
+  if (DatabaseCLI::database.isNull())
+  {
+    throw "No database is open";
+  }
+
+  if (args.getSize() == 0)
+  {
+    throw "Must specify table name";
+  }
+
+  DatabaseCLI::database.getData().insert(args[0]);
+  DatabaseCLI::hasChanges = true;
+  std::cout << "Successfully inserted data\n";
 }
 
 void DatabaseCLI::save(const Vector<String> &args)

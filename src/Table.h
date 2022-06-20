@@ -32,6 +32,8 @@ public:
   void write() const;
   void writeTo(const String &filename) const;
 
+  void insert();
+
   void setName(const String &name);
 
   const String &getName() const;

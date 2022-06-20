@@ -226,6 +226,24 @@ void Table::writeTo(const String &filename) const
   file.close();
 }
 
+void Table::insert()
+{
+  Vector<String> row;
+
+  for (size_t i = 0; i < this->columnTypes.getSize(); ++i)
+  {
+    String entry;
+    std::cout << "Column " << i + 1 << " data: ";
+    std::cin >> entry;
+    row.push(entry);
+  }
+
+  if (!this->addRow(row))
+  {
+    throw "Invalid data in row";
+  }
+}
+
 void Table::setName(const String &name)
 {
   if (!Table::isValidName(name))
