@@ -21,6 +21,8 @@ public:
   bool addColumn(DataType columnType);
   bool addRow(const Vector<String> &row);
 
+  Table innerJoin(size_t column, const Table &other, size_t otherColumn) const;
+
   size_t update(size_t column, const String &search, const String &replace);
   size_t deleteRows(size_t column, const String &value);
 

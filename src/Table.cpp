@@ -59,6 +59,59 @@ bool Table::addRow(const Vector<String> &row)
   return true;
 }
 
+Table Table::innerJoin(size_t column, const Table &other, size_t otherColumn) const
+{
+  if (column-- > this->columnTypes.getSize() || otherColumn-- > other.columnTypes.getSize())
+  {
+    throw "Column number too large";
+  }
+
+  if (this->columnTypes[column] != other.columnTypes[otherColumn])
+  {
+    throw "Column types do not match";
+  }
+
+  Vector<DataType> columnTypes(this->columnTypes);
+
+  for (size_t i = 0; i < other.columnTypes.getSize(); ++i)
+  {
+    if (i != otherColumn)
+    {
+      columnTypes.push(other.columnTypes[i]);
+    }
+  }
+
+  Table result(String("InnerJoin") + this->name + other.name, columnTypes);
+
+  for (size_t i = 0; i < this->data[column].getSize(); ++i)
+  {
+    for (size_t j = 0; j < other.data[otherColumn].getSize(); ++j)
+    {
+      if (this->data[column][i] == other.data[otherColumn][j])
+      {
+        Vector<String> row;
+
+        for (size_t k = 0; k < this->columnTypes.getSize(); ++k)
+        {
+          row.push(this->data[k][i]);
+        }
+
+        for (size_t k = 0; k < other.columnTypes.getSize(); ++k)
+        {
+          if (k != otherColumn)
+          {
+            row.push(other.data[k][i]);
+          }
+        }
+
+        result.addRow(row);
+      }
+    }
+  }
+
+  return result;
+}
+
 size_t Table::update(size_t column, const String &search, const String &replace)
 {
   if (column-- > this->columnTypes.getSize())

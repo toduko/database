@@ -76,6 +76,27 @@ void Database::insert(const String &tableName)
   this->tables[index].insert();
 }
 
+void Database::innerJoin(const String &table1Name, size_t column1, const String &table2Name, size_t column2)
+{
+  int index1 = this->findTable(table1Name);
+
+  if (index1 < 0)
+  {
+    throw "Table 1 not found";
+  }
+
+  int index2 = this->findTable(table2Name);
+
+  if (index2 < 0)
+  {
+    throw "Table 2 not found";
+  }
+
+  Table result = this->tables[index1].innerJoin(column1, this->tables[index2], column2);
+  std::cout << "Successfully created table " << result.getName() << "\n";
+  this->tables.push(result);
+}
+
 const String &Database::getName() const
 {
   return this->name;

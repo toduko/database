@@ -16,6 +16,7 @@ DatabaseCLI::DatabaseCLI() : CLI("database")
   this->addCommand(std::move(Command("print", "prints all rows in table. Usage: print <table name>", &DatabaseCLI::print)));
   this->addCommand(std::move(Command("insert", "inserts a row in table. Usage: insert <table name>", &DatabaseCLI::insert)));
   this->addCommand(std::move(Command("update", "updates the rows that contain a specific value from a column in a table. Usage: update <table name> <column number>", &DatabaseCLI::update)));
+  this->addCommand(std::move(Command("innerjoin", "does innerjoin operation on two tables. Usage: innerjoin <table 1 name> <column 1 number> <table 2 name> <column 2 number>", &DatabaseCLI::innerJoin)));
   this->addCommand(std::move(Command("select", "prints the rows that contain a specific value from a column in a table. Usage: select <column number> <table name> <search value>", &DatabaseCLI::select)));
   this->addCommand(std::move(Command("count", "counts the rows that contain a specific value from a column in a table. Usage: count <column number> <table name> <search value>", &DatabaseCLI::countRows)));
   this->addCommand(std::move(Command("delete", "deletes the rows that contain a specific value from a column in a table. Usage: delete <column number> <table name> <search value>", &DatabaseCLI::deleteRows)));
@@ -93,6 +94,22 @@ void DatabaseCLI::update(const Vector<String> &args)
   }
 
   DatabaseCLI::database.getData().update(args[1].toInt(), args[0]);
+  DatabaseCLI::hasChanges = true;
+}
+
+void DatabaseCLI::innerJoin(const Vector<String> &args)
+{
+  if (DatabaseCLI::database.isNull())
+  {
+    throw "No database is open";
+  }
+
+  if (args.getSize() < 4)
+  {
+    throw "Must specify name and column number for both tables";
+  }
+
+  DatabaseCLI::database.getData().innerJoin(args[0], args[1].toInt(), args[2], args[3].toInt());
   DatabaseCLI::hasChanges = true;
 }
 
